@@ -1,7 +1,6 @@
 require('./setup')
 const assert = require('assert')
 const temp = require('temp')
-const http = require('http')
 const request = require('request-promise-native')
 const buildControllerLayer = require('../lib/controller-layer')
 const {getDatabase, cleanDatabase} = require('./helpers')
