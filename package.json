@@ -7,7 +7,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha **/*.test.js --ui=tdd"
+    "test": "mocha **/*-test.js --ui=tdd"
   },
   "author": "",
   "license": "UNLICENSED",
