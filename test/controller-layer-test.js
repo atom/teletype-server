@@ -33,7 +33,6 @@ suite('Controller Layer', () => {
       json: true
     })
 
-    assert(response.url.match(/^\/shared-buffers\/\d+$/))
-    assert(response.channelName.match(/^shared-buffers\.\d+$/))
+    assert(typeof response.id === 'number')
   })
 })
