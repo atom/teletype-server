@@ -18,14 +18,16 @@ suite('Client Integration', () => {
   })
 
   suiteTeardown(() => {
-    server.close()
+    return new Promise((resolve) => {
+      server.close(resolve)
+    })
   })
 
   setup(() => {
-    cleanDatabase(db)
+    return cleanDatabase(db)
   })
 
-  test.only('sharing a buffer from a host and fetching its initial state from a guest', async () => {
+  test('sharing a buffer from a host and fetching its initial state from a guest', async () => {
     const host = new Client({serverSocketPath})
     const guest = new Client({serverSocketPath})
 

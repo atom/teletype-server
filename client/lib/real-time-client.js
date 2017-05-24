@@ -8,6 +8,10 @@ class RealTimeClient {
   }
 
   createSharedBuffer (delegate) {
-    return SharedBuffer.create({network: this.network, delegate})
+    return SharedBuffer.create({delegate, network: this.network})
+  }
+
+  joinSharedBuffer (id, delegate) {
+    return SharedBuffer.join({id, delegate, network: this.network})
   }
 }

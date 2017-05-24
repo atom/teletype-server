@@ -1,8 +1,12 @@
 module.exports =
 class SharedBuffer {
-  static async create ({delegate, network}) {
+  static create ({delegate, network}) {
     const text = delegate.getLocalText()
-    const {id} = await network.post('/shared-buffers', {text})
-    return id
+    return network.post('/shared-buffers', {text})
+  }
+
+  static async join ({id, delegate, network}) {
+    const {text} = await network.get(`/shared-buffers/${id}`)
+    delegate.setLocalText(text)
   }
 }
