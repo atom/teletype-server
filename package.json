@@ -19,6 +19,7 @@
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
     "pg-promise": "^5.7.1",
+    "pusher": "^1.5.1",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4"
   },

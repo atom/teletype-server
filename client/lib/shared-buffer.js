@@ -11,7 +11,7 @@ class SharedBuffer {
       restGateway, pubSubGateway, delegate,
       siteId, id, replica
     })
-    sharedBuffer.subscribe()
+    await sharedBuffer.subscribe()
     return sharedBuffer
   }
 
@@ -33,7 +33,7 @@ class SharedBuffer {
   }
 
   async join () {
-    this.subscribe()
+    await this.subscribe()
     const {siteId, operations} = await this.restGateway.post(`/shared-buffers/${this.id}/sites`)
     this.replica = new DocumentReplica(siteId)
     this.applyRemoteOperations(operations)
@@ -42,8 +42,8 @@ class SharedBuffer {
     this.delegate.setText(this.replica.getText())
   }
 
-  subscribe () {
-    this.subscription = this.pubSubGateway.subscribe(
+  async subscribe () {
+    this.subscription = await this.pubSubGateway.subscribe(
       `/shared-buffers/${this.id}`,
       'operations',
       this.receive.bind(this)

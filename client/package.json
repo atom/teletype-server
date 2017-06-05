@@ -8,5 +8,8 @@
   },
   "author": "",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "pusher-js": "^4.1.0"
+  }
 }

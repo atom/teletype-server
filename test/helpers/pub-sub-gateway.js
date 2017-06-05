@@ -4,6 +4,10 @@ class PubSubGateway {
     this.callbacksByChannelName = new Map()
   }
 
+  clear () {
+    this.callbacksByChannelName.clear()
+  }
+
   broadcast (channelName, eventName, message) {
     const messageJSON = JSON.stringify(message)
     process.nextTick(() => {
@@ -17,20 +21,24 @@ class PubSubGateway {
   }
 
   subscribe (channelName, eventName, callback) {
-    const wrapper = (receivedEventName, data) => {
-      if (receivedEventName === eventName) callback(data)
-    }
-    let channelCallbacks = this.callbacksByChannelName.get(channelName)
-    if (!channelCallbacks) {
-      channelCallbacks = new Set()
-      this.callbacksByChannelName.set(channelName, channelCallbacks)
-    }
+    return new Promise((resolve) => {
+      process.nextTick(() => {
+        const wrapper = (receivedEventName, data) => {
+          if (receivedEventName === eventName) callback(data)
+        }
+        let channelCallbacks = this.callbacksByChannelName.get(channelName)
+        if (!channelCallbacks) {
+          channelCallbacks = new Set()
+          this.callbacksByChannelName.set(channelName, channelCallbacks)
+        }
 
-    channelCallbacks.add(wrapper)
-    return {
-      dispose () {
-        channelCallbacks.remove(wrapper)
-      }
-    }
+        channelCallbacks.add(wrapper)
+        resolve({
+          dispose () {
+            channelCallbacks.remove(wrapper)
+          }
+        })
+      })
+    })
   }
 }
