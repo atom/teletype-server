@@ -1,7 +1,7 @@
 require('./setup')
 const assert = require('assert')
 const temp = require('temp')
-const {getDatabase, cleanDatabase} = require('./helpers')
+const {getDatabase, cleanDatabase, TestBuffer} = require('./helpers')
 const Client = require('../client')
 const buildControllerLayer = require('../lib/controller-layer')
 
@@ -29,19 +29,12 @@ suite('Client Integration', () => {
 
   test('sharing a buffer from a host and fetching its initial state from a guest', async () => {
     const host = new Client({serverSocketPath})
+    const hostBuffer = new TestBuffer('hello world')
+    const sharedBuffer = await host.createSharedBuffer(hostBuffer)
+
     const guest = new Client({serverSocketPath})
-
-    const sharedBuffer = await host.createSharedBuffer({
-      getLocalText () {
-        return 'hello world'
-      }
-    })
-
-    let client2Text
-    await guest.joinSharedBuffer(sharedBuffer.id, {
-      setLocalText: (text) => client2Text = text
-    })
-
-    assert.equal(client2Text, 'hello world')
+    const guestBuffer = new TestBuffer('')
+    await guest.joinSharedBuffer(sharedBuffer.id, guestBuffer)
+    assert.equal(guestBuffer.getText(), 'hello world')
   })
 })
