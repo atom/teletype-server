@@ -40,7 +40,8 @@ class SharedBuffer {
 
   subscribe () {
     this.subscription = this.network.subscribe(
-      `/shared-buffers/${this.id}/operations`,
+      `/shared-buffers/${this.id}`,
+      'operations',
       this.receive.bind(this)
     )
   }
