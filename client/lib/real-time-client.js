@@ -2,15 +2,25 @@ const SharedBuffer = require('./shared-buffer')
 
 module.exports =
 class RealTimeClient {
-  constructor ({network}) {
-    this.network = network
+  constructor ({restGateway, pubSubGateway}) {
+    this.restGateway = restGateway
+    this.pubSubGateway = pubSubGateway
   }
 
   createSharedBuffer (delegate) {
-    return SharedBuffer.create({delegate, network: this.network})
+    return SharedBuffer.create({
+      delegate,
+      restGateway: this.restGateway,
+      pubSubGateway: this.pubSubGateway
+    })
   }
 
   joinSharedBuffer (id, delegate) {
-    return SharedBuffer.join({id, delegate, network: this.network})
+    return SharedBuffer.join({
+      id,
+      delegate,
+      restGateway: this.restGateway,
+      pubSubGateway: this.pubSubGateway
+    })
   }
 }

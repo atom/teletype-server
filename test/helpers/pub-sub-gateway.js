@@ -1,24 +1,7 @@
-const request = require('request-promise-native')
-
 module.exports =
-class Network {
-  constructor ({serverSocketPath}) {
-    this.serverSocketPath = serverSocketPath
+class PubSubGateway {
+  constructor () {
     this.callbacksByChannelName = new Map()
-  }
-
-  get (path) {
-    return request.get(
-      `http://unix:${this.serverSocketPath}:${path}`,
-      {json: true}
-    )
-  }
-
-  post (path, body) {
-    return request.post(
-      `http://unix:${this.serverSocketPath}:${path}`,
-      {body, json: true}
-    )
   }
 
   broadcast (channelName, eventName, message) {

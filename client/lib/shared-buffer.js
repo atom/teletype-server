@@ -2,24 +2,28 @@ const DocumentReplica = require('tachyon')
 
 module.exports =
 class SharedBuffer {
-  static async create ({delegate, network}) {
+  static async create ({delegate, restGateway, pubSubGateway}) {
     const siteId = 1
     const replica = new DocumentReplica(siteId)
     const operation = replica.insertLocal({position: 0, text: delegate.getText()})
-    const {id} = await network.post('/shared-buffers', {operations: [operation]})
-    const sharedBuffer = new SharedBuffer({network, delegate, siteId, id, replica})
+    const {id} = await restGateway.post('/shared-buffers', {operations: [operation]})
+    const sharedBuffer = new SharedBuffer({
+      restGateway, pubSubGateway, delegate,
+      siteId, id, replica
+    })
     sharedBuffer.subscribe()
     return sharedBuffer
   }
 
-  static async join ({id, delegate, network}) {
-    const sharedBuffer = new SharedBuffer({network, delegate, id})
+  static async join ({restGateway, pubSubGateway, id, delegate}) {
+    const sharedBuffer = new SharedBuffer({restGateway, pubSubGateway, delegate, id})
     await sharedBuffer.join()
     return sharedBuffer
   }
 
-  constructor ({network, delegate, siteId, id, replica}) {
-    this.network = network
+  constructor ({restGateway, pubSubGateway, delegate, siteId, id, replica}) {
+    this.restGateway = restGateway
+    this.pubSubGateway = pubSubGateway
     this.delegate = delegate
     this.id = id
     this.siteId = siteId
@@ -30,7 +34,7 @@ class SharedBuffer {
 
   async join () {
     this.subscribe()
-    const {siteId, operations} = await this.network.post(`/shared-buffers/${this.id}/sites`)
+    const {siteId, operations} = await this.restGateway.post(`/shared-buffers/${this.id}/sites`)
     this.replica = new DocumentReplica(siteId)
     this.applyRemoteOperations(operations)
     this.applyRemoteOperations(this.deferredOperations)
@@ -39,7 +43,7 @@ class SharedBuffer {
   }
 
   subscribe () {
-    this.subscription = this.network.subscribe(
+    this.subscription = this.pubSubGateway.subscribe(
       `/shared-buffers/${this.id}`,
       'operations',
       this.receive.bind(this)
@@ -58,7 +62,7 @@ class SharedBuffer {
     const opToSend = this.replica.applyLocal(op)
     const opId = opIdToString(opToSend.opId)
     this.appliedOperationIds.add(opId)
-    return this.network.post(
+    return this.restGateway.post(
       `/shared-buffers/${this.id}/operations`,
       {operations: [opToSend]}
     )

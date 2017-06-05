@@ -3,18 +3,19 @@ const assert = require('assert')
 const temp = require('temp')
 const {getDatabase, cleanDatabase} = require('./helpers/database')
 const Buffer = require('./helpers/buffer')
-const Network = require('./helpers/network')
+const RestGateway = require('./helpers/rest-gateway')
+const PubSubGateway = require('./helpers/pub-sub-gateway')
 const Client = require('../client')
 const buildControllerLayer = require('../lib/controller-layer')
 
 suite('Client Integration', () => {
-  let db, network, server
+  let db, pubSubGateway, server, serverSocketPath
 
   suiteSetup(() => {
     serverSocketPath = temp.path({suffix: '.socket'})
-    network = new Network({serverSocketPath})
+    pubSubGateway = new PubSubGateway()
     db = getDatabase()
-    const controllerLayer = buildControllerLayer({db, network})
+    const controllerLayer = buildControllerLayer({db, pubSubGateway})
     return new Promise((resolve) => {
       server = controllerLayer.listen(serverSocketPath, resolve)
     })
@@ -31,11 +32,13 @@ suite('Client Integration', () => {
   })
 
   test('sharing a buffer from a host and fetching its initial state from a guest', async () => {
-    const host = new Client({network})
+    const restGateway = new RestGateway({serverSocketPath})
+
+    const host = new Client({restGateway, pubSubGateway})
     const hostBuffer = new Buffer('hello world')
     const hostSharedBuffer = await host.createSharedBuffer(hostBuffer)
 
-    const guest = new Client({network})
+    const guest = new Client({restGateway, pubSubGateway})
     const guestBuffer = new Buffer('')
     const guestSharedBuffer = await guest.joinSharedBuffer(hostSharedBuffer.id, guestBuffer)
     assert.equal(guestBuffer.getText(), 'hello world')
