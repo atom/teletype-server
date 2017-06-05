@@ -1,7 +1,7 @@
 const request = require('request-promise-native')
 
 module.exports =
-class NetworkFacade {
+class Network {
   constructor ({serverSocketPath}) {
     this.serverSocketPath = serverSocketPath
   }

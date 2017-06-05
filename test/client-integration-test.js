@@ -1,7 +1,9 @@
 require('./setup')
 const assert = require('assert')
 const temp = require('temp')
-const {getDatabase, cleanDatabase, TestBuffer} = require('./helpers')
+const {getDatabase, cleanDatabase} = require('./helpers/database')
+const Buffer = require('./helpers/buffer')
+const Network = require('./helpers/network')
 const Client = require('../client')
 const buildControllerLayer = require('../lib/controller-layer')
 
@@ -28,12 +30,14 @@ suite('Client Integration', () => {
   })
 
   test('sharing a buffer from a host and fetching its initial state from a guest', async () => {
-    const host = new Client({serverSocketPath})
-    const hostBuffer = new TestBuffer('hello world')
+    const network = new Network({serverSocketPath})
+
+    const host = new Client({network})
+    const hostBuffer = new Buffer('hello world')
     const sharedBuffer = await host.createSharedBuffer(hostBuffer)
 
-    const guest = new Client({serverSocketPath})
-    const guestBuffer = new TestBuffer('')
+    const guest = new Client({network})
+    const guestBuffer = new Buffer('')
     await guest.joinSharedBuffer(sharedBuffer.id, guestBuffer)
     assert.equal(guestBuffer.getText(), 'hello world')
   })

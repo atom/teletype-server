@@ -1,10 +1,9 @@
-const NetworkFacade = require('./network-facade')
 const SharedBuffer = require('./shared-buffer')
 
 module.exports =
 class RealTimeClient {
-  constructor ({serverSocketPath}) {
-    this.network = new NetworkFacade({serverSocketPath})
+  constructor ({network}) {
+    this.network = network
   }
 
   createSharedBuffer (delegate) {
