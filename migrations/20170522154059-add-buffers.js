@@ -1,20 +1,11 @@
 exports.up = async (db) => {
   await db.createTable('shared_buffers', {
-    id: {type: 'int', primaryKey: true, autoIncrement: true}
+    id: {type: 'int', primaryKey: true, autoIncrement: true},
+    last_site_id: {type: 'int', default: 1}
   })
   await db.createTable('shared_buffer_operations', {
     id: {type: 'int', primaryKey: true, autoIncrement: true},
-    type: {type: 'int'},
-    site: {type: 'int'},
-    seq: {type: 'int'},
-    text: {type: 'text'},
-    extent: {type: 'int'},
-    left_dependency_site: {type: 'int'},
-    left_dependency_seq: {type: 'int'},
-    offset_in_left_dependency: {type: 'int'},
-    right_dependency_site: {type: 'int'},
-    right_dependency_seq: {type: 'int'},
-    offset_in_right_dependency: {type: 'int'},
+    data: {type: 'json'},
     shared_buffer_id: {
       type: 'int',
       foreignKey: {

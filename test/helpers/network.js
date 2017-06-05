@@ -4,6 +4,7 @@ module.exports =
 class Network {
   constructor ({serverSocketPath}) {
     this.serverSocketPath = serverSocketPath
+    this.callbacksByChannelName = new Map()
   }
 
   get (path) {
@@ -18,5 +19,32 @@ class Network {
       `http://unix:${this.serverSocketPath}:${path}`,
       {body, json: true}
     )
+  }
+
+  broadcast (channelName, message) {
+    const messageJSON = JSON.stringify(message)
+    process.nextTick(() => {
+      const channelCallbacks = this.callbacksByChannelName.get(channelName)
+      if (channelCallbacks) {
+        channelCallbacks.forEach((callback) => {
+          callback(JSON.parse(messageJSON))
+        })
+      }
+    })
+  }
+
+  subscribe (channelName, callback) {
+    let channelCallbacks = this.callbacksByChannelName.get(channelName)
+    if (!channelCallbacks) {
+      channelCallbacks = new Set()
+      this.callbacksByChannelName.set(channelName, channelCallbacks)
+    }
+
+    channelCallbacks.add(callback)
+    return {
+      dispose () {
+        channelCallbacks.remove(callback)
+      }
+    }
   }
 }
