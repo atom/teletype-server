@@ -6,8 +6,8 @@ const Buffer = require('./helpers/buffer')
 const RestGateway = require('./helpers/rest-gateway')
 const PubSubGateway = require('./helpers/pub-sub-gateway')
 const ServerPubSubGateway = require('../lib/pusher-pub-sub-gateway')
-const ClientPubSubGateway = require('../client/lib/pusher-pub-sub-gateway')
-const Client = require('../client')
+const ClientPubSubGateway = require('real-time-client/lib/pusher-pub-sub-gateway')
+const Client = require('real-time-client')
 const buildControllerLayer = require('../lib/controller-layer')
 
 suite('Client Integration', () => {
