@@ -1,5 +1,5 @@
 {
-  "name": "real-time",
+  "name": "real-time-server",
   "version": "0.1.0",
   "engines": {
     "node": "^7.10.0"
