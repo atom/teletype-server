@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
-require('../index').startTestServer({databaseURL: 'postgres://localhost:5432/real-time-server-test'})
+const {startServer} = require('../index')
+startServer()

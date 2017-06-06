@@ -9,7 +9,8 @@ async function startServer () {
     databaseURL: process.env.DATABASE_URL,
     pusherAppId: process.env.PUSHER_APP_ID,
     pusherKey: process.env.PUSHER_KEY,
-    pusherSecret: process.env.PUSHER_SECRET
+    pusherSecret: process.env.PUSHER_SECRET,
+    port: process.env.PORT || 3000
   })
   await server.start()
   return server
