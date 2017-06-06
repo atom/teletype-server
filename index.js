@@ -6,8 +6,8 @@ function startServer () {
   require('dotenv').config()
 
   const pgp = require('pg-promise')()
-  const buildControllerLayer = require('../lib/controller-layer')
-  const PubSubGateway = require('../lib/pusher-pub-sub-gateway')
+  const buildControllerLayer = require('./lib/controller-layer')
+  const PubSubGateway = require('./lib/pusher-pub-sub-gateway')
 
   const controllerLayer = buildControllerLayer({
     db: pgp(process.env.DATABASE_URL),
@@ -21,26 +21,11 @@ function startServer () {
   controllerLayer.listen(process.env.PORT || 3000)
 }
 
-function startTestServer ({databaseURL}) {
-  // Migrate the database
-  const path = require('path')
-  const childProcess = require('child_process')
-
-  const pgMigratePath = path.join(__dirname, 'node_modules', '.bin', 'pg-migrate')
-  const migrateUpResult = childProcess.spawnSync(
-    pgMigratePath,
-    ['up', '--migrations-dir', path.join(__dirname, 'migrations')],
-    {env: Object.assign({DATABASE_URL: databaseURL}, process.env)}
-  )
-  if (migrateUpResult.status !== 0) {
-    throw new Error('Error running migrations:\n\n' + migrateUpResult.output)
-  }
-
-  // Start the server on a domain socket
-  const temp = require('temp')
-
-  // const pgp = require('pg-promise')()
-  // db = pgp(databaseURL)
+function startTestServer (params) {
+  const TestServer = require('./lib/test-server')
+  const server = new TestServer(params)
+  server.start()
+  return server
 }
 
 module.exports = {startServer, startTestServer}
