@@ -1,4 +1,0 @@
-{
-  "dev": {"ENV": "DEV_DATABASE_URL"},
-  "test": {"ENV": "TEST_DATABASE_URL"}
-}
