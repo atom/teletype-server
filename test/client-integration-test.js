@@ -10,7 +10,7 @@ const {startTestServer} = require('../index')
 suite('Client Integration', () => {
   let server
 
-  suiteSetup(() => {
+  suiteSetup(async () => {
     const params = {databaseURL: process.env.TEST_DATABASE_URL}
     // Uncomment and provide credentials to test against Pusher.
     // params.pusherCredentials = {
@@ -18,7 +18,7 @@ suite('Client Integration', () => {
     //   key: '123',
     //   secret: '123'
     // }
-    server = startTestServer(params)
+    server = await startTestServer(params)
   })
 
   suiteTeardown(() => {

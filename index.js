@@ -1,30 +1,24 @@
-function startServer () {
+async function startServer () {
   process.on('unhandledRejection', (reason) => {
     console.error(reason.stack)
   })
 
   require('dotenv').config()
-
-  const pgp = require('pg-promise')()
-  const buildControllerLayer = require('./lib/controller-layer')
-  const PubSubGateway = require('./lib/pusher-pub-sub-gateway')
-
-  const controllerLayer = buildControllerLayer({
-    db: pgp(process.env.DATABASE_URL),
-    pubSubGateway: new PubSubGateway({
-      appId: process.env.PUSHER_APP_ID,
-      key: process.env.PUSHER_KEY,
-      secret: process.env.PUSHER_SECRET
-    })
+  const Server = require('./lib/server')
+  const server = new Server({
+    databaseURL: process.env.DATABASE_URL,
+    pusherAppId: process.env.PUSHER_APP_ID,
+    pusherKey: process.env.PUSHER_KEY,
+    pusherSecret: process.env.PUSHER_SECRET
   })
-
-  controllerLayer.listen(process.env.PORT || 3000)
+  await server.start()
+  return server
 }
 
-function startTestServer (params) {
+async function startTestServer (params) {
   const TestServer = require('./lib/test-server')
   const server = new TestServer(params)
-  server.start()
+  await server.start()
   return server
 }
 
