@@ -1,9 +1,6 @@
 require('./setup')
 const assert = require('assert')
-const temp = require('temp')
 const Buffer = require('./helpers/buffer')
-const ServerPubSubGateway = require('../lib/pusher-pub-sub-gateway')
-const ClientPubSubGateway = require('real-time-client/lib/pusher-pub-sub-gateway')
 const Client = require('real-time-client')
 const {startTestServer} = require('../index')
 
