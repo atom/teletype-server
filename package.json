@@ -1,5 +1,5 @@
 {
-  "name": "real-time-server",
+  "name": "@atom-team/real-time-server",
   "version": "0.1.0",
   "engines": {
     "node": "^7.10.0"
@@ -12,7 +12,6 @@
   },
   "author": "",
   "license": "UNLICENSED",
-  "private": true,
   "dependencies": {
     "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
