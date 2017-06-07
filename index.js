@@ -10,7 +10,8 @@ async function startServer () {
     pusherAppId: process.env.PUSHER_APP_ID,
     pusherKey: process.env.PUSHER_KEY,
     pusherSecret: process.env.PUSHER_SECRET,
-    port: process.env.PORT || 3000
+    port: process.env.PORT || 3000,
+    maxMessageSizeInBytes: process.env.MAX_MESSAGE_SIZE_IN_BYTES || 10 * 1024
   })
   await server.start()
   return server
