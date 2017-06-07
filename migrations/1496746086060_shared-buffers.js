@@ -5,7 +5,7 @@ exports.up = (pgm) => {
   })
   pgm.createTable('shared_buffer_operations', {
     id: 'id',
-    data: {type: 'json'},
+    data: {type: 'text'},
     shared_buffer_id: {type: 'int', references: 'shared_buffers'}
   })
 }
