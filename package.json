@@ -20,11 +20,10 @@
     "pg-promise": "^5.7.1",
     "pusher": "^1.5.1",
     "request": "^2.81.0",
-    "request-promise-native": "^1.0.4"
+    "request-promise-native": "^1.0.4",
+    "temp": "^0.8.3"
   },
   "devDependencies": {
-    "database-cleaner": "^1.2.0",
-    "mocha": "^3.4.1",
-    "temp": "^0.8.3"
+    "mocha": "^3.4.1"
   }
 }
