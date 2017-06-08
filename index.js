@@ -11,7 +11,7 @@ async function startServer () {
     pusherKey: process.env.PUSHER_KEY,
     pusherSecret: process.env.PUSHER_SECRET,
     port: process.env.PORT || 3000,
-    maxMessageSizeInBytes: process.env.MAX_MESSAGE_SIZE_IN_BYTES || 10 * 1024
+    maxMessageSizeInBytes: process.env.MAX_MESSAGE_SIZE_IN_BYTES || 9 * 1024
   })
   await server.start()
   return server
