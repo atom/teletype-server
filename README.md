@@ -25,3 +25,19 @@
     ```sh
     ./script/server
     ```
+
+## Deploying
+
+1. Ask @as-cii, @nathansobo, @jasonrudolph, or @iolsen to grant you deploy access on https://dashboard.heroku.com/apps/atom-tachyon.
+
+2. Set up Heroku as a remote:
+
+    ```sh
+    heroku git:remote -a atom-tachyon
+    ```
+
+3. Deploy:
+
+    ```sh
+    git push heroku master
+    ```
