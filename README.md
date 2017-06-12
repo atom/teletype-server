@@ -23,5 +23,5 @@
 3. Start the server
 
     ```sh
-    ./script/start
+    ./script/server
     ```

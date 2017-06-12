@@ -1,2 +1,2 @@
 release: npm run migrate up
-web: node script/start
+web: node script/server
