@@ -1,13 +1,13 @@
 exports.up = (pgm) => {
   pgm.createTable('shared_editors', {
-    id: 'id',
-    shared_buffer_id: {type: 'int', references: 'shared_buffers'}
+    id: {type: 'bigserial', primaryKey: true},
+    shared_buffer_id: {type: 'bigint', references: 'shared_buffers'}
   })
 
   pgm.createTable('shared_editor_selection_marker_layers', {
-    id: 'id',
-    site_id: {type: 'int'},
-    shared_editor_id: {type: 'int', references: 'shared_editors'},
+    id: {type: 'bigserial', primaryKey: true},
+    site_id: {type: 'bigint'},
+    shared_editor_id: {type: 'bigint', references: 'shared_editors'},
     marker_ranges: {type: 'text'}
   })
 }
