@@ -25,4 +25,21 @@ async function startTestServer (params) {
   return server
 }
 
-module.exports = {startServer, startTestServer}
+function startEvictor () {
+  process.on('unhandledRejection', (reason) => {
+    console.error(reason.stack)
+  })
+
+  require('dotenv').config()
+  const Evictor = require('./lib/evictor')
+  const evictor = new Evictor({
+    databaseURL: process.env.DATABASE_URL,
+    pusherAppId: process.env.PUSHER_APP_ID,
+    pusherKey: process.env.PUSHER_KEY,
+    pusherSecret: process.env.PUSHER_SECRET,
+    evictionPeriodInMilliseconds: process.env.EVICTION_PERIOD_IN_MILLISECONDS || 60 * 1000
+  })
+  evictor.start()
+}
+
+module.exports = {startServer, startTestServer, startEvictor}
