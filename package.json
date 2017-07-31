@@ -9,7 +9,7 @@
   "scripts": {
     "migrate": "pg-migrate",
     "test": "mocha **/*-test.js --ui=tdd",
-    "start": "script/start"
+    "start": "script/server"
   },
   "author": "",
   "license": "UNLICENSED",
