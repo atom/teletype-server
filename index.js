@@ -10,8 +10,9 @@ async function startServer () {
     pusherAppId: process.env.PUSHER_APP_ID,
     pusherKey: process.env.PUSHER_KEY,
     pusherSecret: process.env.PUSHER_SECRET,
-    port: process.env.PORT || 3000,
-    maxMessageSizeInBytes: process.env.MAX_MESSAGE_SIZE_IN_BYTES || 9 * 1024,
+    twilioAccount: process.env.TWILIO_ACCOUNT,
+    twilioAuthToken: process.env.TWILIO_AUTH_TOKEN,
+    port: process.env.PORT || 3000
   })
   await server.start()
   return server
@@ -24,21 +25,4 @@ async function startTestServer (params) {
   return server
 }
 
-function startEvictor () {
-  process.on('unhandledRejection', (reason) => {
-    console.error(reason.stack)
-  })
-
-  require('dotenv').config()
-  const Evictor = require('./lib/evictor')
-  const evictor = new Evictor({
-    databaseURL: process.env.DATABASE_URL,
-    pusherAppId: process.env.PUSHER_APP_ID,
-    pusherKey: process.env.PUSHER_KEY,
-    pusherSecret: process.env.PUSHER_SECRET,
-    evictionPeriodInMilliseconds: process.env.EVICTION_PERIOD_IN_MILLISECONDS || 60 * 1000
-  })
-  evictor.start()
-}
-
-module.exports = {startServer, startTestServer, startEvictor}
+module.exports = {startServer, startTestServer}

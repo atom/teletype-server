@@ -1,4 +1,0 @@
-#!/usr/bin/env node
-
-const {startEvictor} = require('../index')
-startEvictor()
