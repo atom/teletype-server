@@ -2,7 +2,7 @@ const assert = require('assert')
 const IdentityProvider = require('../lib/identity-provider')
 
 suite('IdentityProvider', () => {
-  test('returns user for given OAuth token', async () => {
+  test('returns user associated with OAuth token', async () => {
     const request = {
       get: async function (url, {headers}) {
         const usersByOauthToken = {
