@@ -1,4 +1,5 @@
 const assert = require('assert')
+const {StatusCodeError} = require('request-promise-core/lib/errors')
 const IdentityProvider = require('../lib/identity-provider')
 
 suite('IdentityProvider', () => {
@@ -25,5 +26,28 @@ suite('IdentityProvider', () => {
 
     const user2 = await provider.getUser('user-2-token')
     assert.equal(user2.username, 'user-2')
+  })
+
+  test('throws an error when given an invalid OAuth token', async () => {
+    const request = {
+      get: async function (url, {headers}) {
+        const body = JSON.stringify({message: 'Bad credentials'})
+        throw new StatusCodeError(401, body)
+      }
+    }
+
+    const provider = new IdentityProvider({request})
+
+    let error = null
+    await provider.getUser('some-invalid-token').
+      then(
+        (value) => {},
+        (rejection) => {error = rejection}
+      ).then(
+        () => {
+          assert(error)
+          assert(error.includes('401'), 'Expected error to include status code')
+        }
+      )
   })
 })
