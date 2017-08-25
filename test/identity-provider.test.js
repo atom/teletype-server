@@ -50,4 +50,12 @@ suite('IdentityProvider', () => {
         }
       )
   })
+
+  test.skip('throws an error when API rate limit is exceeded', function() {
+    // TODO
+  })
+
+  test.skip('throws an error when GitHub API is inaccessible', function() {
+    // TODO
+  })
 })
