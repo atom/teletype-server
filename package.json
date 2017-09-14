@@ -22,6 +22,7 @@
     "pusher": "^1.5.1",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
+    "server-destroy": "^1.0.1",
     "temp": "^0.8.3",
     "uuid": "^3.0.1"
   },
