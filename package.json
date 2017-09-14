@@ -26,6 +26,7 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "mocha": "^3.4.1"
+    "mocha": "^3.4.1",
+    "server-destroy": "^1.0.1"
   }
 }
