@@ -1,9 +1,14 @@
 async function startServer (id) {
-  process.on('unhandledRejection', (reason) => {
-    console.error(reason.stack)
+  const bugsnag = require('bugsnag')
+  const dotEnv = require('dotenv')
+  dotEnv.config()
+  bugsnag.register(process.env.BUGSNAG_API_KEY)
+
+  process.on('unhandledRejection', (error) => {
+    console.error(error.stack)
+    bugsnag.notify(error)
   })
 
-  require('dotenv').config()
   const Server = require('./lib/server')
   const server = new Server({
     databaseURL: process.env.DATABASE_URL,
