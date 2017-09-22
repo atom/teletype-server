@@ -1,4 +1,4 @@
-async function startServer () {
+async function startServer (id) {
   process.on('unhandledRejection', (reason) => {
     console.error(reason.stack)
   })
@@ -15,6 +15,7 @@ async function startServer () {
     port: process.env.PORT || 3000
   })
   await server.start()
+  console.log(`Worker ${id} (pid: ${process.pid}): listening on port ${server.port}`)
   return server
 }
 

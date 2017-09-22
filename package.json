@@ -1,6 +1,6 @@
 {
   "name": "@atom/real-time-server",
-  "version": "0.12.1",
+  "version": "0.12.3",
   "engines": {
     "node": "7.10.1",
     "npm": "^5.4.2"
@@ -25,6 +25,7 @@
     "request-promise-native": "^1.0.4",
     "server-destroy": "^1.0.1",
     "temp": "^0.8.3",
+    "throng": "^4.0.0",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
