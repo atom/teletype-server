@@ -16,6 +16,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "bugsnag": "^1.12.2",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
     "node-pg-migrate": "^2.2.1",
