@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -xe
+
+cd "$(dirname "$0")/.."
+
+if [ -d /usr/local/share/nodenv/shims ]; then
+  export NODENV_ROOT=/usr/local/share/nodenv
+  export PATH="/usr/local/share/nodenv/shims:/usr/local/share/nodenv/bin:$PATH"
+fi
+
+npm install
+npm test
