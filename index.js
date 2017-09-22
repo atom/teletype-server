@@ -1,4 +1,6 @@
 async function startServer (id) {
+  require('newrelic')
+
   const bugsnag = require('bugsnag')
   const dotEnv = require('dotenv')
   dotEnv.config()
