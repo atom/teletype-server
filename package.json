@@ -14,17 +14,17 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
-    "body-parser": "1.18.1",
-    "dotenv": "4.0.0",
-    "express": "4.15.4",
-    "node-pg-migrate": "2.9.0",
-    "pg-promise": "5.9.7",
-    "pusher": "1.5.1",
-    "request": "2.81.0",
-    "request-promise-native": "1.0.4",
-    "server-destroy": "1.0.1",
-    "temp": "0.8.3",
-    "uuid": "3.1.0"
+    "body-parser": "^1.17.2",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "node-pg-migrate": "^2.2.1",
+    "pg-promise": "^5.7.1",
+    "pusher": "^1.5.1",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4",
+    "server-destroy": "^1.0.1",
+    "temp": "^0.8.3",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "mocha": "^3.4.1"
