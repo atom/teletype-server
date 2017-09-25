@@ -18,7 +18,7 @@ async function startServer (id) {
     pusherSecret: process.env.PUSHER_SECRET,
     twilioAccount: process.env.TWILIO_ACCOUNT,
     twilioAuthToken: process.env.TWILIO_AUTH_TOKEN,
-    boomtownSecret: process.env.BOOMTOWN_SECRET,
+    healthCheckSecret: process.env.HEALTH_CHECK_SECRET,
     port: process.env.PORT || 3000
   })
   await server.start()
