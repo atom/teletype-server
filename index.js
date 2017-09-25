@@ -1,11 +1,7 @@
 async function startServer (id) {
-  const dotEnv = require('dotenv')
-  dotEnv.config()
-
+  require('dotenv').config()
   require('newrelic')
-
-  const bugsnag = require('bugsnag')
-  bugsnag.register(process.env.BUGSNAG_API_KEY)
+  require('bugsnag').register(process.env.BUGSNAG_API_KEY)
 
   process.on('unhandledRejection', (error) => {
     console.error(error.stack)
