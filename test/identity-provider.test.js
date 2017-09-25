@@ -21,10 +21,10 @@ suite('IdentityProvider', () => {
 
     const provider = new IdentityProvider({request})
 
-    const user1 = await provider.getUser('user-1-token')
+    const user1 = await provider.identityForToken('user-1-token')
     assert.equal(user1.username, 'user-1')
 
-    const user2 = await provider.getUser('user-2-token')
+    const user2 = await provider.identityForToken('user-2-token')
     assert.equal(user2.username, 'user-2')
   })
 
@@ -39,7 +39,7 @@ suite('IdentityProvider', () => {
     const provider = new IdentityProvider({request})
 
     let error = null
-    await provider.getUser('some-invalid-token').
+    await provider.identityForToken('some-invalid-token').
       then(
         (value) => {},
         (rejection) => {error = rejection}
