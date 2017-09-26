@@ -39,16 +39,13 @@ suite('IdentityProvider', () => {
     const provider = new IdentityProvider({request})
 
     let error = null
-    await provider.identityForToken('some-invalid-token').
-      then(
-        (value) => {},
-        (rejection) => {error = rejection}
-      ).then(
-        () => {
-          assert(error)
-          assert(error.includes('401'), 'Expected error to include status code')
-        }
-      )
+    try {
+      await provider.identityForToken('some-invalid-token')
+    } catch (e) {
+      error = e
+    }
+
+    assert(error.message.includes('401'), 'Expected error to include status code')
   })
 
   test.skip('throws an error when API rate limit is exceeded', function() {

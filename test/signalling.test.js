@@ -88,7 +88,7 @@ suite('/peers/:id/signals', () => {
     }
 
     assert.equal(responseError.statusCode, 401)
-    assert.equal(responseError.error.reason, 'Error resolving identity for token')
+    assert.equal(responseError.error.message, 'Error resolving identity for token')
     assert.deepEqual(signals, [])
   })
 })
