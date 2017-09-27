@@ -71,7 +71,6 @@ suite('IdentityProvider', () => {
   test('throws an error when GitHub API is inaccessible', async () => {
     const request = {
       get: async function (url, {headers}) {
-        const body = JSON.stringify({message: 'Bad credentials'})
         throw new RequestError('a request error')
       }
     }
