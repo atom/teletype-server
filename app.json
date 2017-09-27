@@ -1,0 +1,51 @@
+{
+  "name": "real-time-server",
+  "scripts": {},
+  "env": {
+    "BOOMTOWN_SECRET": {
+      "required": true
+    },
+    "BUGSNAG_API_KEY": {
+      "required": true
+    },
+    "GITHUB_CLIENT_ID": {
+      "required": true
+    },
+    "GITHUB_CLIENT_SECRET": {
+      "required": true
+    },
+    "NEW_RELIC_APP_NAME": {
+      "required": true
+    },
+    "NEW_RELIC_LICENSE_KEY": {
+      "required": true
+    },
+    "PAPERTRAIL_API_TOKEN": {
+      "required": true
+    },
+    "PUSHER_APP_ID": {
+      "required": true
+    },
+    "PUSHER_KEY": {
+      "required": true
+    },
+    "PUSHER_SECRET": {
+      "required": true
+    },
+    "TWILIO_ACCOUNT": {
+      "required": true
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "required": true
+    }
+  },
+  "formation": {},
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
