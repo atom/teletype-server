@@ -71,26 +71,35 @@ suite('Controller', () => {
       assert.deepEqual(signals, [])
     })
 
-    test('returns 401 when authentication fails', async () => {
+    test('returns a non-200 status code when authentication fails', async () => {
       const signals = []
       await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
-      server.identityProvider.setIdentitiesByToken({'peer-1-token': null})
 
-      let responseError
       try {
-        await post(server, '/peers/peer-2/signals', {
-          oauthToken: 'peer-1-token',
-          senderId: 'peer-1',
-          signal: 'signal-1',
-          sequenceNumber: 0
-        })
-      } catch (e) {
-        responseError = e
-      }
+        server.identityProvider.identityForToken = function (token) {
+          const error = new Error('an error')
+          error.statusCode = 442
+          throw error
+        }
 
-      assert.equal(responseError.statusCode, 401)
-      assert.equal(responseError.error.message, 'Error resolving identity for token')
-      assert.deepEqual(signals, [])
+        let responseError
+        try {
+          await post(server, '/peers/peer-id/signals', {
+            oauthToken: 'token',
+            senderId: 'sender',
+            signal: 'signal',
+            sequenceNumber: 0
+          })
+        } catch (e) {
+          responseError = e
+        }
+
+        assert.equal(responseError.statusCode, 442)
+        assert.equal(responseError.error.message, 'Error resolving identity for token: an error')
+        assert.deepEqual(signals, [])
+      } finally {
+        delete server.identityProvider.identityForToken
+      }
     })
   })
 
@@ -102,20 +111,28 @@ suite('Controller', () => {
       assert.deepEqual(identity, {login: 'user-with-token-peer-1-token'})
     })
 
-    test('returns 401 when authentication fails', async () => {
-      server.identityProvider.setIdentitiesByToken({'peer-1-token': null})
-
-      let responseError
+    test('returns a non-200 status code when authentication fails', async () => {
       try {
-        await get(server, '/identity', {
-          headers: {'GitHub-OAuth-token': 'peer-1-token'}
-        })
-      } catch (e) {
-        responseError = e
-      }
+        server.identityProvider.identityForToken = function (token) {
+          const error = new Error('an error')
+          error.statusCode = 476
+          throw error
+        }
 
-      assert.equal(responseError.statusCode, 401)
-      assert.equal(responseError.error.message, 'No identity found for OAuth token')
+        let responseError
+        try {
+          await get(server, '/identity', {
+            headers: {'GitHub-OAuth-token': 'peer-1-token'}
+          })
+        } catch (e) {
+          responseError = e
+        }
+
+        assert.equal(responseError.statusCode, 476)
+        assert.equal(responseError.error.message, 'Error resolving identity for token: an error')
+      } finally {
+        delete server.identityProvider.identityForToken
+      }
     })
   })
 })
