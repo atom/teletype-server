@@ -1,5 +1,5 @@
 const assert = require('assert')
-const {StatusCodeError} = require('request-promise-core/lib/errors')
+const {RequestError, StatusCodeError} = require('request-promise-core/lib/errors')
 const IdentityProvider = require('../lib/identity-provider')
 
 suite('IdentityProvider', () => {
@@ -48,11 +48,43 @@ suite('IdentityProvider', () => {
     assert(error.message.includes('401'), 'Expected error to include status code')
   })
 
-  test.skip('throws an error when API rate limit is exceeded', function() {
-    // TODO
+  test('throws an error when API rate limit is exceeded', async () => {
+    const request = {
+      get: async function (url, {headers}) {
+        const body = JSON.stringify({message: 'API rate limit exceeded'})
+        throw new StatusCodeError(403, body)
+      }
+    }
+
+    const provider = new IdentityProvider({request})
+
+    let error = null
+    try {
+      await provider.identityForToken('some-token')
+    } catch (e) {
+      error = e
+    }
+
+    assert(error.message.includes('403'), 'Expected error to include status code')
   })
 
-  test.skip('throws an error when GitHub API is inaccessible', function() {
-    // TODO
+  test('throws an error when GitHub API is inaccessible', async () => {
+    const request = {
+      get: async function (url, {headers}) {
+        const body = JSON.stringify({message: 'Bad credentials'})
+        throw new RequestError('a request error')
+      }
+    }
+
+    const provider = new IdentityProvider({request})
+
+    let error = null
+    try {
+      await provider.identityForToken('some-token')
+    } catch (e) {
+      error = e
+    }
+
+    assert(error.message.includes('a request error'), 'Expected error to include request error message')
   })
 })
