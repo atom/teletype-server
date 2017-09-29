@@ -55,3 +55,7 @@ You'll need to reload the window for the change to take effect. You should not n
 4. Once you're satisfied with your testing, click **Promote to production...** on the staging app to move the staging slug to the production app.
 
 ![screen shot 2017-09-28 at 11 51 43 am](https://user-images.githubusercontent.com/1789/30982049-8eef0d9e-a443-11e7-8e2b-bf143dbd24a4.png)
+
+## Chat-ops
+
+You can also interact with our Heroku pipeline on Slack via ChatOps. Check out [this page](https://devcenter.heroku.com/articles/chatops) for more information.
