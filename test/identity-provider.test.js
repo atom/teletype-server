@@ -1,5 +1,5 @@
 const assert = require('assert')
-const {StatusCodeError} = require('request-promise-core/lib/errors')
+const {RequestError, StatusCodeError} = require('request-promise-core/lib/errors')
 const IdentityProvider = require('../lib/identity-provider')
 
 suite('IdentityProvider', () => {
@@ -21,10 +21,10 @@ suite('IdentityProvider', () => {
 
     const provider = new IdentityProvider({request})
 
-    const user1 = await provider.getUser('user-1-token')
+    const user1 = await provider.identityForToken('user-1-token')
     assert.equal(user1.username, 'user-1')
 
-    const user2 = await provider.getUser('user-2-token')
+    const user2 = await provider.identityForToken('user-2-token')
     assert.equal(user2.username, 'user-2')
   })
 
@@ -39,23 +39,51 @@ suite('IdentityProvider', () => {
     const provider = new IdentityProvider({request})
 
     let error = null
-    await provider.getUser('some-invalid-token').
-      then(
-        (value) => {},
-        (rejection) => {error = rejection}
-      ).then(
-        () => {
-          assert(error)
-          assert(error.includes('401'), 'Expected error to include status code')
-        }
-      )
+    try {
+      await provider.identityForToken('some-invalid-token')
+    } catch (e) {
+      error = e
+    }
+
+    assert(error.message.includes('401'), 'Expected error to include status code')
   })
 
-  test.skip('throws an error when API rate limit is exceeded', function() {
-    // TODO
+  test('throws an error when API rate limit is exceeded', async () => {
+    const request = {
+      get: async function (url, {headers}) {
+        const body = JSON.stringify({message: 'API rate limit exceeded'})
+        throw new StatusCodeError(403, body)
+      }
+    }
+
+    const provider = new IdentityProvider({request})
+
+    let error = null
+    try {
+      await provider.identityForToken('some-token')
+    } catch (e) {
+      error = e
+    }
+
+    assert(error.message.includes('403'), 'Expected error to include status code')
   })
 
-  test.skip('throws an error when GitHub API is inaccessible', function() {
-    // TODO
+  test('throws an error when GitHub API is inaccessible', async () => {
+    const request = {
+      get: async function (url, {headers}) {
+        throw new RequestError('a request error')
+      }
+    }
+
+    const provider = new IdentityProvider({request})
+
+    let error = null
+    try {
+      await provider.identityForToken('some-token')
+    } catch (e) {
+      error = e
+    }
+
+    assert(error.message.includes('a request error'), 'Expected error to include request error message')
   })
 })
