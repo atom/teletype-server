@@ -22,10 +22,10 @@ suite('IdentityProvider', () => {
     const provider = new IdentityProvider({request})
 
     const user1 = await provider.identityForToken('user-1-token')
-    assert.equal(user1.username, 'user-1')
+    assert.equal(user1.login, 'user-1')
 
     const user2 = await provider.identityForToken('user-2-token')
-    assert.equal(user2.username, 'user-2')
+    assert.equal(user2.login, 'user-2')
   })
 
   test('throws an error when given an invalid OAuth token', async () => {
