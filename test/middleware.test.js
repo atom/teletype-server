@@ -37,7 +37,6 @@ suite('enforceProtocol', () => {
     enforceProtocol(httpRequest, httpResponse, () => { httpRequestAllowed = true })
     assert(httpRequestAllowed)
   })
-
 })
 
 class FakeResponse {
