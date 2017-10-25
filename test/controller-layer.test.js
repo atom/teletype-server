@@ -26,11 +26,10 @@ suite('Controller', () => {
 
       signals.length = 0
       await post(server, '/peers/peer-2/signals', {
-        oauthToken: 'peer-1-token',
         senderId: 'peer-1',
         signal: 'signal-1',
         sequenceNumber: 0
-      })
+      }, {headers: {'GitHub-OAuth-token': 'peer-1-token'}})
       await condition(() => deepEqual(signals, [{
         senderId: 'peer-1',
         senderIdentity: {login: 'user-with-token-peer-1-token'},
@@ -40,11 +39,10 @@ suite('Controller', () => {
 
       signals.length = 0
       await post(server, '/peers/peer-2/signals', {
-        oauthToken: 'peer-1-token',
         senderId: 'peer-1',
         signal: 'signal-1',
         sequenceNumber: 1
-      })
+      }, {headers: {'GitHub-OAuth-token': 'peer-1-token'}})
       await condition(() => deepEqual(signals, [{
         senderId: 'peer-1',
         signal: 'signal-1',
@@ -52,33 +50,14 @@ suite('Controller', () => {
       }]))
     })
 
-    test('returns 400 when OAuth token is missing', async () => {
-      const signals = []
-      await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
-
-      let responseError
-      try {
-        await post(server, '/peers/peer-2/signals', {
-          senderId: 'peer-1',
-          signal: 'signal-1',
-          sequenceNumber: 0
-        })
-      } catch (e) {
-        responseError = e
-      }
-
-      assert.equal(responseError.statusCode, 400)
-      assert.deepEqual(signals, [])
-    })
-
-    test('returns a non-200 status code when authentication fails', async () => {
+    test('returns a 401 status code when authentication fails', async () => {
       const signals = []
       await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
 
       try {
         server.identityProvider.identityForToken = function (token) {
           const error = new Error('an error')
-          error.statusCode = 442
+          error.statusCode = 499
           throw error
         }
 
@@ -94,8 +73,7 @@ suite('Controller', () => {
           responseError = e
         }
 
-        assert.equal(responseError.statusCode, 442)
-        assert.equal(responseError.error.message, 'Error resolving identity for token: an error')
+        assert.equal(responseError.statusCode, 401)
         assert.deepEqual(signals, [])
       } finally {
         delete server.identityProvider.identityForToken
@@ -115,7 +93,7 @@ suite('Controller', () => {
       try {
         server.identityProvider.identityForToken = function (token) {
           const error = new Error('an error')
-          error.statusCode = 476
+          error.statusCode = 499
           throw error
         }
 
