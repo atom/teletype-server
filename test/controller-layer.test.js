@@ -111,7 +111,7 @@ suite('Controller', () => {
       assert.deepEqual(identity, {login: 'user-with-token-peer-1-token'})
     })
 
-    test('returns a non-200 status code when authentication fails', async () => {
+    test('returns a 401 status code when authentication fails', async () => {
       try {
         server.identityProvider.identityForToken = function (token) {
           const error = new Error('an error')
@@ -128,7 +128,7 @@ suite('Controller', () => {
           responseError = e
         }
 
-        assert.equal(responseError.statusCode, 476)
+        assert.equal(responseError.statusCode, 401)
         assert.equal(responseError.error.message, 'Error resolving identity for token: an error')
       } finally {
         delete server.identityProvider.identityForToken
