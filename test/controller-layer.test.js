@@ -19,6 +19,27 @@ suite('Controller', () => {
     return server.reset()
   })
 
+  suite('GET /ice-servers', () => {
+    test('returns a 401 status code when authentication fails', async () => {
+      try {
+        server.identityProvider.identityForToken = simulateAuthenticationError
+
+        let responseError
+        try {
+          await get(server, '/ice-servers', {
+            headers: {'GitHub-OAuth-token': 'invalid-token'}
+          })
+        } catch (e) {
+          responseError = e
+        }
+
+        assert.equal(responseError.statusCode, 401)
+      } finally {
+        delete server.identityProvider.identityForToken
+      }
+    })
+  })
+
   suite('POST /peers/:id/signals', () => {
     test('sends authenticated signals to the peer with the given id', async () => {
       const signals = []
@@ -71,6 +92,48 @@ suite('Controller', () => {
 
         assert.equal(responseError.statusCode, 401)
         assert.deepEqual(signals, [])
+      } finally {
+        delete server.identityProvider.identityForToken
+      }
+    })
+  })
+
+  suite('POST /portals', () => {
+    test('returns a 401 status code when authentication fails', async () => {
+      try {
+        server.identityProvider.identityForToken = simulateAuthenticationError
+
+        let responseError
+        try {
+          await post(server, '/portals', {
+            headers: {'GitHub-OAuth-token': 'invalid-token'}
+          })
+        } catch (e) {
+          responseError = e
+        }
+
+        assert.equal(responseError.statusCode, 401)
+      } finally {
+        delete server.identityProvider.identityForToken
+      }
+    })
+  })
+
+  suite('GET /portals/:id', () => {
+    test('returns a 401 status code when authentication fails', async () => {
+      try {
+        server.identityProvider.identityForToken = simulateAuthenticationError
+
+        let responseError
+        try {
+          await get(server, '/portals/42', {
+            headers: {'GitHub-OAuth-token': 'invalid-token'}
+          })
+        } catch (e) {
+          responseError = e
+        }
+
+        assert.equal(responseError.statusCode, 401)
       } finally {
         delete server.identityProvider.identityForToken
       }
