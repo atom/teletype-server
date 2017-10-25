@@ -19,7 +19,7 @@ suite('Controller', () => {
     return server.reset()
   })
 
-  suite('/peers/:id/signals', () => {
+  suite('POST /peers/:id/signals', () => {
     test('sends authenticated signals to the peer with the given id', async () => {
       const signals = []
       await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
@@ -103,7 +103,7 @@ suite('Controller', () => {
     })
   })
 
-  suite('/identity', () => {
+  suite('GET /identity', () => {
     test('returns the identity associated with the given OAuth token', async () => {
       const identity = await get(server, '/identity', {
         headers: {'GitHub-OAuth-token': 'peer-1-token'}
