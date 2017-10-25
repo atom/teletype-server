@@ -55,11 +55,7 @@ suite('Controller', () => {
       await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
 
       try {
-        server.identityProvider.identityForToken = function (token) {
-          const error = new Error('an error')
-          error.statusCode = 499
-          throw error
-        }
+        server.identityProvider.identityForToken = simulateAuthenticationError
 
         let responseError
         try {
@@ -91,11 +87,7 @@ suite('Controller', () => {
 
     test('returns a 401 status code when authentication fails', async () => {
       try {
-        server.identityProvider.identityForToken = function (token) {
-          const error = new Error('an error')
-          error.statusCode = 499
-          throw error
-        }
+        server.identityProvider.identityForToken = simulateAuthenticationError
 
         let responseError
         try {
@@ -114,3 +106,9 @@ suite('Controller', () => {
     })
   })
 })
+
+function simulateAuthenticationError (token) {
+  const error = new Error('an error')
+  error.statusCode = 499
+  throw error
+}
