@@ -6,7 +6,7 @@ exports.get = function (server, relativeURL, {headers}={}) {
   return request.get(url, {headers, json: true})
 }
 
-exports.post = function (server, relativeURL, body) {
+exports.post = function (server, relativeURL, body, {headers}={}) {
   const url = new URL(relativeURL, server.address).toString()
-  return request.post(url, {body, json: true})
+  return request.post(url, {headers, body, json: true})
 }

@@ -19,18 +19,17 @@ suite('Controller', () => {
     return server.reset()
   })
 
-  suite('/peers/:id/signals', () => {
+  suite('POST /peers/:id/signals', () => {
     test('sends authenticated signals to the peer with the given id', async () => {
       const signals = []
       await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
 
       signals.length = 0
       await post(server, '/peers/peer-2/signals', {
-        oauthToken: 'peer-1-token',
         senderId: 'peer-1',
         signal: 'signal-1',
         sequenceNumber: 0
-      })
+      }, {headers: {'GitHub-OAuth-token': 'peer-1-token'}})
       await condition(() => deepEqual(signals, [{
         senderId: 'peer-1',
         senderIdentity: {login: 'user-with-token-peer-1-token'},
@@ -40,11 +39,10 @@ suite('Controller', () => {
 
       signals.length = 0
       await post(server, '/peers/peer-2/signals', {
-        oauthToken: 'peer-1-token',
         senderId: 'peer-1',
         signal: 'signal-1',
         sequenceNumber: 1
-      })
+      }, {headers: {'GitHub-OAuth-token': 'peer-1-token'}})
       await condition(() => deepEqual(signals, [{
         senderId: 'peer-1',
         signal: 'signal-1',
@@ -52,35 +50,12 @@ suite('Controller', () => {
       }]))
     })
 
-    test('returns 400 when OAuth token is missing', async () => {
-      const signals = []
-      await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
-
-      let responseError
-      try {
-        await post(server, '/peers/peer-2/signals', {
-          senderId: 'peer-1',
-          signal: 'signal-1',
-          sequenceNumber: 0
-        })
-      } catch (e) {
-        responseError = e
-      }
-
-      assert.equal(responseError.statusCode, 400)
-      assert.deepEqual(signals, [])
-    })
-
-    test('returns a non-200 status code when authentication fails', async () => {
+    test('returns a 401 status code when authentication fails', async () => {
       const signals = []
       await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
 
       try {
-        server.identityProvider.identityForToken = function (token) {
-          const error = new Error('an error')
-          error.statusCode = 442
-          throw error
-        }
+        server.identityProvider.identityForToken = simulateAuthenticationError
 
         let responseError
         try {
@@ -94,8 +69,7 @@ suite('Controller', () => {
           responseError = e
         }
 
-        assert.equal(responseError.statusCode, 442)
-        assert.equal(responseError.error.message, 'Error resolving identity for token: an error')
+        assert.equal(responseError.statusCode, 401)
         assert.deepEqual(signals, [])
       } finally {
         delete server.identityProvider.identityForToken
@@ -103,7 +77,7 @@ suite('Controller', () => {
     })
   })
 
-  suite('/identity', () => {
+  suite('GET /identity', () => {
     test('returns the identity associated with the given OAuth token', async () => {
       const identity = await get(server, '/identity', {
         headers: {'GitHub-OAuth-token': 'peer-1-token'}
@@ -111,13 +85,9 @@ suite('Controller', () => {
       assert.deepEqual(identity, {login: 'user-with-token-peer-1-token'})
     })
 
-    test('returns a non-200 status code when authentication fails', async () => {
+    test('returns a 401 status code when authentication fails', async () => {
       try {
-        server.identityProvider.identityForToken = function (token) {
-          const error = new Error('an error')
-          error.statusCode = 476
-          throw error
-        }
+        server.identityProvider.identityForToken = simulateAuthenticationError
 
         let responseError
         try {
@@ -128,7 +98,7 @@ suite('Controller', () => {
           responseError = e
         }
 
-        assert.equal(responseError.statusCode, 476)
+        assert.equal(responseError.statusCode, 401)
         assert.equal(responseError.error.message, 'Error resolving identity for token: an error')
       } finally {
         delete server.identityProvider.identityForToken
@@ -136,3 +106,9 @@ suite('Controller', () => {
     })
   })
 })
+
+function simulateAuthenticationError (token) {
+  const error = new Error('an error')
+  error.statusCode = 499
+  throw error
+}
