@@ -1,6 +1,6 @@
 {
   "name": "@atom/real-time-server",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "engines": {
     "node": "7.10.1",
     "npm": "5.4.2"
