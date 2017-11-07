@@ -1,5 +1,5 @@
 {
-  "name": "real-time-server",
+  "name": "teletype-server",
   "scripts": {},
   "env": {
     "BOOMTOWN_SECRET": {

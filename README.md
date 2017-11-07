@@ -8,16 +8,16 @@
 1. Clone and bootstrap
 
     ```sh
-    git clone https://github.com/atom/real-time-server.git ~/github/real-time-server
-    cd ~/github/real-time-server
+    git clone https://github.com/atom/teletype-server.git ~/github/teletype-server
+    cd ~/github/teletype-server
     cp .env.example .env
-    createdb real-time-server-dev
+    createdb teletype-server-dev
     npm install
     npm run migrate up
     ```
 
 2. Setup Pusher
-  1. Ask @as-cii, @nathansobo, or @jasonrudolph to add you as a collaborator on the [tachyon-development app](https://dashboard.pusher.com/apps/348824).
+  1. Ask @as-cii, @nathansobo, or @jasonrudolph to add you as a collaborator on the [teletype-development app](https://dashboard.pusher.com/apps/348824).
   2. Copy [the key and secret from Pusher](https://dashboard.pusher.com/apps/348824/keys), and set those values in your `.env` file.
 
 3. Start the server
@@ -38,7 +38,7 @@ Alternatively, you can also wait for a deployment notification to be displayed d
 
 ![screen shot 2017-09-29 at 12 18 54](https://user-images.githubusercontent.com/482957/31011960-649b70be-a510-11e7-9d7c-b8a5a3b8e630.png)
 
-The real-time package can be instructed to use one of these servers by opening the package's settings page and assigning the base URL.
+The teletype package can be instructed to use one of these servers by opening the package's settings page and assigning the base URL.
 
 ![screen shot 2017-09-28 at 11 46 08 am](https://user-images.githubusercontent.com/1789/30982114-b918d8ca-a443-11e7-83d3-65f0e35e99c3.png)
 
