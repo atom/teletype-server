@@ -21,6 +21,7 @@ async function startServer (id) {
     githubClientId: process.env.GITHUB_CLIENT_ID,
     githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
     boomtownSecret: process.env.BOOMTOWN_SECRET,
+    hashSecret: process.env.HASH_SECRET,
     port: process.env.PORT || 3000
   })
   await server.start()
