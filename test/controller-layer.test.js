@@ -105,6 +105,39 @@ suite('Controller', () => {
       }
     })
   })
+
+  suite('events', () => {
+    test('stores events on POST /portals and GET /portals/:id', async () => {
+      const peer1Headers = {headers: {'GitHub-OAuth-token': 'peer-1-token'}}
+      const peer2Headers = {headers: {'GitHub-OAuth-token': 'peer-2-token'}}
+
+      const {id: portal1Id} = await post(server, '/portals', {hostPeerId: 'some-id'}, peer1Headers)
+      await get(server, '/portals/' + portal1Id, peer2Headers)
+
+      const {id: portal2Id} = await post(server, '/portals', {hostPeerId: 'some-id'}, peer2Headers)
+      await get(server, '/portals/' + portal2Id, peer1Headers)
+
+      const events = await server.modelLayer.getEvents()
+      assert.equal(events.length, 4)
+
+      assert.equal(events[0].name, 'create-portal')
+      assert.equal(events[0].portal_id, portal1Id)
+
+      assert.equal(events[1].name, 'lookup-portal')
+      assert.equal(events[1].portal_id, portal1Id)
+
+      assert.equal(events[2].name, 'create-portal')
+      assert.equal(events[2].portal_id, portal2Id)
+
+      assert.equal(events[3].name, 'lookup-portal')
+      assert.equal(events[3].portal_id, portal2Id)
+
+      // Ensure user_id changes depending on the signed in user.
+      assert.notEqual(events[0].user_id, events[1].user_id)
+      assert.equal(events[0].user_id, events[3].user_id)
+      assert.equal(events[1].user_id, events[2].user_id)
+    })
+  })
 })
 
 function simulateAuthenticationError (token) {
