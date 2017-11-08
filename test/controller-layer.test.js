@@ -119,8 +119,8 @@ suite('Controller', () => {
       const {id: portal2Id} = await post(server, '/portals', {hostPeerId: 'some-id'}, peer2Headers)
       await get(server, '/portals/' + portal2Id, peer1Headers)
 
+      await condition(async () => (await server.modelLayer.getEvents()).length === 4)
       const events = await server.modelLayer.getEvents()
-      assert.equal(events.length, 4)
 
       assert.equal(events[0].name, 'create-portal')
       assert.equal(events[0].portal_id, portal1Id)
