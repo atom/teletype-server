@@ -8,7 +8,7 @@ suite('Controller', () => {
   let server
 
   suiteSetup(async () => {
-    server = await startTestServer()
+    server = await startTestServer({databaseURL: process.env.TEST_DATABASE_URL})
   })
 
   suiteTeardown(() => {

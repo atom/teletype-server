@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "migrate": "pg-migrate",
-    "test": "mocha **/*.test.js --ui=tdd",
+    "test": "mocha test/setup.js **/*.test.js --ui=tdd",
     "start": "script/server"
   },
   "author": "",
