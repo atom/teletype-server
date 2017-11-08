@@ -138,6 +138,11 @@ suite('Controller', () => {
       assert.notEqual(events[0].user_id, events[1].user_id)
       assert.equal(events[0].user_id, events[3].user_id)
       assert.equal(events[1].user_id, events[2].user_id)
+
+      // Ensure events are timestamped using the database clock.
+      assert(events[0].created_at < events[1].created_at)
+      assert(events[1].created_at < events[2].created_at)
+      assert(events[2].created_at < events[3].created_at)
     })
   })
 })
