@@ -7,8 +7,8 @@ suite('IdentityProvider', () => {
     const request = {
       get: async function (url, {headers}) {
         const usersByOauthToken = {
-          'user-1-token': {login: 'user-1'},
-          'user-2-token': {login: 'user-2'}
+          'user-1-token': {id: 1, login: 'user-1'},
+          'user-2-token': {id: 2, login: 'user-2'}
         }
 
         const authorizationHeader = headers['Authorization']
@@ -22,10 +22,10 @@ suite('IdentityProvider', () => {
     const provider = new IdentityProvider({request})
 
     const user1 = await provider.identityForToken('user-1-token')
-    assert.equal(user1.login, 'user-1')
+    assert.deepEqual(user1, {id: '1', login: 'user-1'})
 
     const user2 = await provider.identityForToken('user-2-token')
-    assert.equal(user2.login, 'user-2')
+    assert.deepEqual(user2, {id: '2', login: 'user-2'})
   })
 
   test('throws an error when given an invalid OAuth token', async () => {

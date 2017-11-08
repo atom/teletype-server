@@ -21,6 +21,8 @@ suite('Controller', () => {
 
   suite('POST /peers/:id/signals', () => {
     test('sends authenticated signals to the peer with the given id', async () => {
+      const peer1Identity = await server.identityProvider.identityForToken('peer-1-token')
+
       const signals = []
       await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
 
@@ -32,7 +34,7 @@ suite('Controller', () => {
       }, {headers: {'GitHub-OAuth-token': 'peer-1-token'}})
       await condition(() => deepEqual(signals, [{
         senderId: 'peer-1',
-        senderIdentity: {login: 'user-with-token-peer-1-token'},
+        senderIdentity: peer1Identity,
         signal: 'signal-1',
         sequenceNumber: 0
       }]))
@@ -82,7 +84,7 @@ suite('Controller', () => {
       const identity = await get(server, '/identity', {
         headers: {'GitHub-OAuth-token': 'peer-1-token'}
       })
-      assert.deepEqual(identity, {login: 'user-with-token-peer-1-token'})
+      assert.deepEqual(identity, {id: 'user-with-token-peer-1-token-id', login: 'user-with-token-peer-1-token'})
     })
 
     test('returns a 401 status code when authentication fails', async () => {
