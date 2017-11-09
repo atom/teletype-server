@@ -50,7 +50,7 @@ You'll need to reload the window for the change to take effect. You should not n
 
 4. Once you're satisfied with your testing, click **Promote to production...** on the staging app to move the staging slug to the production app.
 
-![screen shot 2017-09-28 at 11 51 43 am](https://user-images.githubusercontent.com/1789/30982049-8eef0d9e-a443-11e7-8e2b-bf143dbd24a4.png)
+![screen shot 2017-11-09 at 10 09 30](https://user-images.githubusercontent.com/482957/32597196-44b75ba0-c536-11e7-9c6d-92a4ebb85cfc.png)
 
 ## Chat-ops
 
