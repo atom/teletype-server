@@ -1,29 +1,40 @@
-## Dependencies
+# teletype-server
+
+## Hacking
+
+### Dependencies
+
+To run teletype-server locally, you'll first need to have:
 
 - Node 7+
 - PostgreSQL 9.x
+- An app on [pusher.com](https://pusher.com/docs/javascript_quick_start#get-your-free-API-keys)
 
 ## Running locally
 
 1. Clone and bootstrap
 
     ```sh
-    git clone https://github.com/atom/teletype-server.git ~/github/teletype-server
-    cd ~/github/teletype-server
+    git clone https://github.com/atom/teletype-server.git
+    cd teletype-server
     cp .env.example .env
     createdb teletype-server-test
     npm install
     npm run migrate up
     ```
 
-2. Setup Pusher
-  1. Ask @as-cii, @nathansobo, or @jasonrudolph to add you as a collaborator on the [teletype-development app](https://dashboard.pusher.com/apps/348824).
-  2. Copy [the key and secret from Pusher](https://dashboard.pusher.com/apps/348824/keys), and set those values in your `.env` file.
+2. Copy the `app_id`, `key`, and `secret` for your app on pusher.com, and set those values in your `.env` file.
 
 3. Start the server
 
     ```sh
     ./script/server
+    ```
+
+4. Run the tests
+
+    ```sh
+    npm test
     ```
 
 ## Testing pull requests
