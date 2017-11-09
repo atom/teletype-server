@@ -10,11 +10,11 @@ To run teletype-server locally, you'll first need to have:
 - PostgreSQL 9.x
 - An app on [pusher.com](https://pusher.com/docs/javascript_quick_start#get-your-free-API-keys)
 
-## Running locally
+### Running locally
 
 1. Clone and bootstrap
 
-    ```sh
+    ```
     git clone https://github.com/atom/teletype-server.git
     cd teletype-server
     cp .env.example .env
@@ -23,17 +23,17 @@ To run teletype-server locally, you'll first need to have:
     npm run migrate up
     ```
 
-2. Copy the `app_id`, `key`, and `secret` for your app on pusher.com, and set those values in your `.env` file.
+2. Copy the `app_id`, `key`, and `secret` for your app on pusher.com, and set those values in your `.env` file
 
 3. Start the server
 
-    ```sh
+    ```
     ./script/server
     ```
 
 4. Run the tests
 
-    ```sh
+    ```
     npm test
     ```
 
