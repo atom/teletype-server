@@ -1,5 +1,7 @@
 # teletype-server
 
+The server-side application that facilitates peer discovery for collaborative editing sessions in [Teletype](https://github.com/atom/teletype).
+
 ## Hacking
 
 ### Dependencies
