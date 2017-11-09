@@ -8,7 +8,7 @@ suite('Controller', () => {
   let server
 
   suiteSetup(async () => {
-    server = await startTestServer()
+    server = await startTestServer({databaseURL: process.env.TEST_DATABASE_URL})
   })
 
   suiteTeardown(() => {
@@ -21,6 +21,8 @@ suite('Controller', () => {
 
   suite('POST /peers/:id/signals', () => {
     test('sends authenticated signals to the peer with the given id', async () => {
+      const peer1Identity = await server.identityProvider.identityForToken('peer-1-token')
+
       const signals = []
       await server.pubSubGateway.subscribe('/peers/peer-2', 'signal', (signal) => signals.push(signal))
 
@@ -32,7 +34,7 @@ suite('Controller', () => {
       }, {headers: {'GitHub-OAuth-token': 'peer-1-token'}})
       await condition(() => deepEqual(signals, [{
         senderId: 'peer-1',
-        senderIdentity: {login: 'user-with-token-peer-1-token'},
+        senderIdentity: peer1Identity,
         signal: 'signal-1',
         sequenceNumber: 0
       }]))
@@ -82,7 +84,7 @@ suite('Controller', () => {
       const identity = await get(server, '/identity', {
         headers: {'GitHub-OAuth-token': 'peer-1-token'}
       })
-      assert.deepEqual(identity, {login: 'user-with-token-peer-1-token'})
+      assert.deepEqual(identity, {id: 'user-with-token-peer-1-token-id', login: 'user-with-token-peer-1-token'})
     })
 
     test('returns a 401 status code when authentication fails', async () => {
@@ -103,6 +105,44 @@ suite('Controller', () => {
       } finally {
         delete server.identityProvider.identityForToken
       }
+    })
+  })
+
+  suite('events', () => {
+    test('stores events on POST /portals and GET /portals/:id', async () => {
+      const peer1Headers = {headers: {'GitHub-OAuth-token': 'peer-1-token'}}
+      const peer2Headers = {headers: {'GitHub-OAuth-token': 'peer-2-token'}}
+
+      const {id: portal1Id} = await post(server, '/portals', {hostPeerId: 'some-id'}, peer1Headers)
+      await get(server, '/portals/' + portal1Id, peer2Headers)
+
+      const {id: portal2Id} = await post(server, '/portals', {hostPeerId: 'some-id'}, peer2Headers)
+      await get(server, '/portals/' + portal2Id, peer1Headers)
+
+      await condition(async () => (await server.modelLayer.getEvents()).length === 4)
+      const events = await server.modelLayer.getEvents()
+
+      assert.equal(events[0].name, 'create-portal')
+      assert.equal(events[0].portal_id, portal1Id)
+
+      assert.equal(events[1].name, 'lookup-portal')
+      assert.equal(events[1].portal_id, portal1Id)
+
+      assert.equal(events[2].name, 'create-portal')
+      assert.equal(events[2].portal_id, portal2Id)
+
+      assert.equal(events[3].name, 'lookup-portal')
+      assert.equal(events[3].portal_id, portal2Id)
+
+      // Ensure user_id changes depending on the signed in user.
+      assert.notEqual(events[0].user_id, events[1].user_id)
+      assert.equal(events[0].user_id, events[3].user_id)
+      assert.equal(events[1].user_id, events[2].user_id)
+
+      // Ensure events are timestamped using the database clock.
+      assert(events[0].created_at < events[1].created_at)
+      assert(events[1].created_at < events[2].created_at)
+      assert(events[2].created_at < events[3].created_at)
     })
   })
 })

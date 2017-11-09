@@ -2,6 +2,13 @@ language: node_js
 node_js:
   - "8"
 
+services:
+  - postgresql
+
+before_script:
+  - 'createdb teletype-server-test'
+  - 'cp .env.example .env'
+
 notifications:
   email:
     on_success: never
