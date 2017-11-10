@@ -119,7 +119,12 @@ suite('Controller', () => {
       const {id: portal2Id} = await post(server, '/portals', {hostPeerId: 'some-id'}, peer2Headers)
       await get(server, '/portals/' + portal2Id, peer1Headers)
 
-      await condition(async () => (await server.modelLayer.getEvents()).length === 4)
+      const malformedPortalId = '123456'
+      try {
+        await get(server, '/portals/' + malformedPortalId, peer1Headers)
+      } catch (e) {}
+
+      await condition(async () => (await server.modelLayer.getEvents()).length === 5)
       const events = await server.modelLayer.getEvents()
 
       assert.equal(events[0].name, 'create-portal')
@@ -134,15 +139,20 @@ suite('Controller', () => {
       assert.equal(events[3].name, 'lookup-portal')
       assert.equal(events[3].portal_id, portal2Id)
 
+      assert.equal(events[4].name, 'lookup-portal')
+      assert.equal(events[4].portal_id, malformedPortalId)
+
       // Ensure user_id changes depending on the signed in user.
       assert.notEqual(events[0].user_id, events[1].user_id)
       assert.equal(events[0].user_id, events[3].user_id)
       assert.equal(events[1].user_id, events[2].user_id)
+      assert.equal(events[3].user_id, events[4].user_id)
 
       // Ensure events are timestamped using the database clock.
       assert(events[0].created_at < events[1].created_at)
       assert(events[1].created_at < events[2].created_at)
       assert(events[2].created_at < events[3].created_at)
+      assert(events[3].created_at < events[4].created_at)
     })
   })
 })
