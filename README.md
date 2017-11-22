@@ -11,6 +11,7 @@ To run teletype-server locally, you'll first need to have:
 - Node 7+
 - PostgreSQL 9.x
 - An app on [pusher.com](https://pusher.com/docs/javascript_quick_start#get-your-free-API-keys)
+- An [OAuth app on github.com](https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/registering-oauth-apps/)
 
 ### Running locally
 
@@ -28,13 +29,15 @@ To run teletype-server locally, you'll first need to have:
 
 2. Copy the `app_id`, `key`, and `secret` for your app on pusher.com, and set those values in your `.env` file
 
-3. Start the server
+3. Copy the client ID and client secret for your OAuth app on github.com, and set those values in your `.env` file
+
+4. Start the server
 
     ```
     ./script/server
     ```
 
-4. Run the tests
+5. Run the tests
 
     ```
     npm test
