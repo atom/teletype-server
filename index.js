@@ -22,7 +22,7 @@ async function startServer (id) {
     githubApiUrl: process.env.GITHUB_API_URL || "https://api.github.com",
     githubClientId: process.env.GITHUB_CLIENT_ID,
     githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
-    githubClientOAuthToken: process.env.GITHUB_OAUTH_TOKEN,
+    githubOauthToken: process.env.GITHUB_OAUTH_TOKEN,
     boomtownSecret: process.env.BOOMTOWN_SECRET,
     hashSecret: process.env.HASH_SECRET,
     port: process.env.PORT || 3000
