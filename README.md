@@ -20,6 +20,7 @@ To run teletype-server locally, you'll first need to have:
     git clone https://github.com/atom/teletype-server.git
     cd teletype-server
     cp .env.example .env
+    createdb teletype-server-dev
     createdb teletype-server-test
     npm install
     npm run migrate up
