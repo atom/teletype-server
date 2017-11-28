@@ -16,11 +16,13 @@ async function startServer (id) {
     pusherAppId: process.env.PUSHER_APP_ID,
     pusherKey: process.env.PUSHER_KEY,
     pusherSecret: process.env.PUSHER_SECRET,
+    pusherCluster: process.env.PUSHER_CLUSTER || "mt1",
     twilioAccount: process.env.TWILIO_ACCOUNT,
     twilioAuthToken: process.env.TWILIO_AUTH_TOKEN,
     githubApiUrl: process.env.GITHUB_API_URL || "https://api.github.com",
     githubClientId: process.env.GITHUB_CLIENT_ID,
     githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
+    githubOauthToken: process.env.GITHUB_OAUTH_TOKEN,
     boomtownSecret: process.env.BOOMTOWN_SECRET,
     hashSecret: process.env.HASH_SECRET,
     port: process.env.PORT || 3000
