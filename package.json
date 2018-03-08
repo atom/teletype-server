@@ -13,7 +13,7 @@
     "start": "script/server"
   },
   "author": "",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.17.2",
     "bugsnag": "^1.12.2",
