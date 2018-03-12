@@ -33,7 +33,7 @@ async function startServer (id) {
 }
 
 async function startTestServer (params) {
-  const TestServer = require('./lib/test-server')
+  const TestServer = require('./test/test-server')
   const server = new TestServer(params)
   await server.start()
   return server

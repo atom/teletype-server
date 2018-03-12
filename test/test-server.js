@@ -5,10 +5,10 @@ const path = require('path')
 const childProcess = require('child_process')
 const temp = require('temp')
 const pgp = require('pg-promise')()
-const buildControllerLayer = require('./controller-layer')
-const ModelLayer = require('./model-layer')
-const PusherPubSubGateway = require('../lib/pusher-pub-sub-gateway')
 const HTTPTestServer = require('./http-test-server')
+const buildControllerLayer = require('../lib/controller-layer')
+const ModelLayer = require('../lib/model-layer')
+const PusherPubSubGateway = require('../lib/pusher-pub-sub-gateway')
 
 module.exports =
 class TestServer {

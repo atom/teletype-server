@@ -1,9 +1,8 @@
 const assert = require('assert')
 const express = require('express')
 const request = require('request-promise-native')
+const HTTPTestServer = require('./http-test-server')
 const {authenticate, disableResponseHeaders, enforceProtocol} = require('../lib/middleware')
-
-const HTTPTestServer = require('./../lib/http-test-server')
 
 suite('enforceProtocol', () => {
   test('requires HTTPS for production requests', () => {
