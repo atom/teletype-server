@@ -43,7 +43,7 @@ class TestServer {
   }
 
   migrateDatabase () {
-    const pgMigratePath = require.resolve('node-pg-migrate/bin/pg-migrate')
+    const pgMigratePath = require.resolve('node-pg-migrate/bin/node-pg-migrate')
     const migrateUpResult = childProcess.spawnSync(
       pgMigratePath,
       ['up', '--migrations-dir', path.join(__dirname, '..', 'migrations')],

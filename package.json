@@ -1,6 +1,6 @@
 {
   "name": "@atom/teletype-server",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "engines": {
     "node": "7.10.1",
     "npm": "5.4.2"
@@ -13,7 +13,7 @@
     "start": "script/server"
   },
   "author": "",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.17.2",
     "bugsnag": "^1.12.2",
@@ -21,8 +21,8 @@
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
     "newrelic": "^2.2.1",
-    "node-pg-migrate": "^2.2.1",
-    "pg-promise": "^5.7.1",
+    "node-pg-migrate": "^2.25.0",
+    "pg-promise": "^8.1.1",
     "pusher": "^1.5.1",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
