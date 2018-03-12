@@ -1,5 +1,9 @@
 const assert = require('assert')
-const {authenticate, enforceProtocol} = require('../lib/middleware')
+const express = require('express')
+const request = require('request-promise-native')
+const {authenticate, disableResponseHeaders, enforceProtocol} = require('../lib/middleware')
+
+const HTTPTestServer = require('./../lib/http-test-server')
 
 suite('enforceProtocol', () => {
   test('requires HTTPS for production requests', () => {
@@ -97,6 +101,60 @@ suite('authenticate', () => {
       assert(requestAllowed)
       assert(!response.locals.identity)
     }
+  })
+})
+
+suite('disableResponseHeaders', () => {
+  let server
+
+  suiteSetup(async () => {
+    const app = express()
+    app.use(disableResponseHeaders({
+      headers: ['etag', 'x-custom-header-b'],
+      paths: ['/foo']
+    }))
+
+    app.get('/foo', function (req, res) {
+      res.set('X-Custom-Header-A', 'A')
+      res.set('X-Custom-Header-B', 'B')
+      res.send({})
+    })
+
+    app.get('/bar', function (req, res) {
+      res.set('X-Custom-Header-A', 'A')
+      res.set('X-Custom-Header-B', 'B')
+      res.send({})
+    })
+
+    server = new HTTPTestServer({app})
+    await server.listen()
+    return server
+  })
+
+  suiteTeardown(() => {
+    return server.destroy()
+  })
+
+  test('disables the specified standard response headers for the specified paths', async () => {
+    const root = server.address()
+
+    let response = await request.get(`${root}/foo`, {resolveWithFullResponse: true})
+    assert.equal(response.headers['etag'], null)
+
+    response = await request.get(`${root}/bar`, {resolveWithFullResponse: true})
+    assert(response.headers['etag'])
+  })
+
+  test('disables the specified custom response headers for the specified paths', async () => {
+    const root = server.address()
+
+    let response = await request.get(`${root}/foo`, {resolveWithFullResponse: true})
+    assert.equal(response.headers['x-custom-header-a'], 'A')
+    assert.equal(response.headers['x-custom-header-b'], null)
+
+    response = await request.get(`${root}/bar`, {resolveWithFullResponse: true})
+    assert.equal(response.headers['x-custom-header-a'], 'A')
+    assert.equal(response.headers['x-custom-header-b'], 'B')
   })
 })
 
