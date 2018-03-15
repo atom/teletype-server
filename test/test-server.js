@@ -5,8 +5,9 @@ const path = require('path')
 const childProcess = require('child_process')
 const temp = require('temp')
 const pgp = require('pg-promise')()
-const buildControllerLayer = require('./controller-layer')
-const ModelLayer = require('./model-layer')
+const HTTPTestServer = require('./http-test-server')
+const buildControllerLayer = require('../lib/controller-layer')
+const ModelLayer = require('../lib/model-layer')
 const PusherPubSubGateway = require('../lib/pusher-pub-sub-gateway')
 
 module.exports =
@@ -23,7 +24,7 @@ class TestServer {
   }
 
   stop () {
-    return new Promise((resolve) => this.server.destroy(resolve))
+    return this.httpServer.destroy()
   }
 
   async reset () {
@@ -53,6 +54,11 @@ class TestServer {
     }
   }
 
+  address () {
+    assert(this.httpServer, 'Call listen() to start the server before asking for its address')
+    return this.httpServer.address()
+  }
+
   listen () {
     let pubSubGateway
     if (this.pusherCredentials) {
@@ -66,19 +72,13 @@ class TestServer {
 
     if (this.databaseURL) this.db = pgp(this.databaseURL)
     this.modelLayer = new ModelLayer({db: this.db, hashSecret: this.hashSecret})
-    const controllerLayer = buildControllerLayer({
+    const app = buildControllerLayer({
       modelLayer: this.modelLayer,
       pubSubGateway,
       identityProvider: this.identityProvider
     })
-    return new Promise((resolve) => {
-      const randomPortSelectionFlag = 0
-      this.server = controllerLayer.listen(randomPortSelectionFlag, 'localhost', () => {
-        enableDestroy(this.server)
-        this.address = `http://localhost:${this.server.address().port}`
-        resolve()
-      })
-    })
+    this.httpServer = new HTTPTestServer({app})
+    return this.httpServer.listen()
   }
 }
 
