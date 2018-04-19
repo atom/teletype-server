@@ -84,6 +84,21 @@ suite('authenticate', () => {
       assert.equal(response.body.message, 'Error resolving identity for token: an error')
     }
 
+    // Make a request with a missing token.
+    {
+      let requestAllowed
+      const request = {
+        path: '/some-path',
+        headers: {}
+      }
+      const response = new FakeResponse()
+      await authenticateMiddleware(request, response, () => { requestAllowed = false })
+
+      assert(!requestAllowed)
+      assert.equal(response.code, 401)
+      assert.equal(response.body.message, 'Authentication required')
+    }
+
     // Make a request to an ignored path, and don't pass a token.
     {
       let requestAllowed
