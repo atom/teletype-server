@@ -92,7 +92,7 @@ suite('authenticate', () => {
         headers: {}
       }
       const response = new FakeResponse()
-      await authenticateMiddleware(request, response, () => { requestAllowed = false })
+      await authenticateMiddleware(request, response, () => { requestAllowed = true })
 
       assert(!requestAllowed)
       assert.equal(response.code, 401)
