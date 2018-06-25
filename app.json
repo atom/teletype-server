@@ -40,6 +40,18 @@
     },
     "TWILIO_AUTH_TOKEN": {
       "required": true
+    },
+    "COTURN_USERNAME": {
+      "required": true
+    },
+    "COTURN_PASSWORD": {
+      "required": true
+    },
+    "ACTIVE_PUB_SUB_GATEWAY": {
+      "required": true
+    },
+    "ACTIVE_ICE_SERVER_PROVIDER": {
+      "required": true
     }
   },
   "formation": {},

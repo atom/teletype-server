@@ -25,7 +25,11 @@ async function startServer (id) {
     githubOauthToken: process.env.GITHUB_OAUTH_TOKEN,
     boomtownSecret: process.env.BOOMTOWN_SECRET,
     hashSecret: process.env.HASH_SECRET,
-    port: process.env.PORT || 3000
+    port: process.env.PORT || 3000,
+    coturnUsername: process.env.COTURN_USERNAME,
+    coturnPassword: process.env.COTURN_PASSWORD,
+    activePubSubGateway: process.env.ACTIVE_PUB_SUB_GATEWAY,
+    activeIceServerProvider: process.env.ACTIVE_ICE_SERVER_PROVIDER
   })
   await server.start()
   console.log(`Worker ${id} (pid: ${process.pid}): listening on port ${server.port}`)
