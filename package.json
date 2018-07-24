@@ -19,7 +19,7 @@
     "bugsnag": "^1.12.2",
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
-    "express": "^4.15.3",
+    "express": "^4.15.5",
     "newrelic": "^2.2.1",
     "node-pg-migrate": "^2.25.0",
     "pg-promise": "^8.1.1",
