@@ -33,6 +33,6 @@
   },
   "devDependencies": {
     "deep-equal": "^1.0.1",
-    "mocha": "^3.4.1"
+    "mocha": "^5.2.0"
   }
 }
