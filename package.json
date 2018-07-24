@@ -20,7 +20,7 @@
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "express": "^4.15.5",
-    "newrelic": "^2.2.1",
+    "newrelic": "^4.6.0",
     "node-pg-migrate": "^2.25.0",
     "pg-promise": "^8.1.1",
     "pusher": "^1.5.1",
