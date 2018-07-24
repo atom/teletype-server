@@ -15,7 +15,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.17.2",
+    "body-parser": "^1.18.3",
     "bugsnag": "^1.12.2",
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
