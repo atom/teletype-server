@@ -47,10 +47,25 @@
     "COTURN_PASSWORD": {
       "required": true
     },
+    "KEYCLOAK_API_URL": {
+      "required": true
+    },
+    "KEYCLOAK_CLIENT_ID": {
+      "required": true
+    },
+    "KEYCLOAK_CLIENT_SECRET": {
+      "required": true
+    },
+    "KEYCLOAK_REALM": {
+      "required": true
+    },
     "ACTIVE_PUB_SUB_GATEWAY": {
       "required": true
     },
     "ACTIVE_ICE_SERVER_PROVIDER": {
+      "required": true
+    },
+    "ACTIVE_IDENTITY_PROVIDER": {
       "required": true
     }
   },

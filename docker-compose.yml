@@ -55,5 +55,37 @@ services:
         aliases:
           - socketcluster
 
+  keycloak:
+    image: jboss/keycloak
+    ports:
+     - 8080:8080
+    restart: always
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: keycloak-database
+      KEYCLOAK_USER: teletype
+      KEYCLOAK_PASSWORD: password
+    networks:
+      teletype:
+        aliases:
+          - keycloak
+
+  keycloak-database:
+    image: postgres
+    ports:
+     - 5434:5432
+    volumes:
+     - ./keycloak-database:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: keycloak
+    networks:
+      teletype:
+        aliases:
+          - keycloak-database
+
+
 networks:
   teletype:
