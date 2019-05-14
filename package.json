@@ -1,6 +1,6 @@
 {
   "name": "@atom/teletype-server",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "engines": {
     "node": "7.10.1",
     "npm": "5.4.2"
