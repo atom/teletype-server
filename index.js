@@ -23,9 +23,18 @@ async function startServer (id) {
     githubClientId: process.env.GITHUB_CLIENT_ID,
     githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
     githubOauthToken: process.env.GITHUB_OAUTH_TOKEN,
+    keycloakApiUrl: process.env.KEYCLOAK_API_URL,
+    keycloakClientId: process.env.KEYCLOAK_CLIENT_ID,
+    keycloakClientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
+    keycloakRealm: process.env.KEYCLOAK_REALM,
     boomtownSecret: process.env.BOOMTOWN_SECRET,
     hashSecret: process.env.HASH_SECRET,
-    port: process.env.PORT || 3000
+    port: process.env.PORT || 3000,
+    coturnUsername: process.env.COTURN_USERNAME,
+    coturnPassword: process.env.COTURN_PASSWORD,
+    activePubSubGateway: process.env.ACTIVE_PUB_SUB_GATEWAY,
+    activeIceServerProvider: process.env.ACTIVE_ICE_SERVER_PROVIDER,
+    activeIdentityProvider: process.env.ACTIVE_IDENTITY_PROVIDER
   })
   await server.start()
   console.log(`Worker ${id} (pid: ${process.pid}): listening on port ${server.port}`)

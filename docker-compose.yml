@@ -1,0 +1,91 @@
+version: '3'
+
+services:
+  database:
+    image: postgres
+    ports:
+     - 5432:5432
+    volumes:
+     - ./database:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: teletype
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: teletype-server-dev
+    networks:
+      teletype:
+
+  test-database:
+    image: postgres
+    ports:
+     - 5433:5432
+    volumes:
+     - ./test-database:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: teletype
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: teletype-server-test
+    networks:
+      teletype:
+
+  coturn:
+    image: coturn
+    build:
+      context: coturn
+      dockerfile: Dockerfile
+    ports:
+     - 3478:3478
+    restart: always
+    networks:
+      teletype:
+        aliases:
+          - coturn
+
+  socketcluster:
+    image: socketcluster
+    build:
+      context: socketcluster
+      dockerfile: Dockerfile
+    ports:
+     - 8000:8000
+    restart: always
+    networks:
+      teletype:
+        aliases:
+          - socketcluster
+
+  keycloak:
+    image: jboss/keycloak
+    ports:
+     - 8080:8080
+    restart: always
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: keycloak-database
+      KEYCLOAK_USER: teletype
+      KEYCLOAK_PASSWORD: password
+    networks:
+      teletype:
+        aliases:
+          - keycloak
+
+  keycloak-database:
+    image: postgres
+    ports:
+     - 5434:5432
+    volumes:
+     - ./keycloak-database:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: keycloak
+    networks:
+      teletype:
+        aliases:
+          - keycloak-database
+
+
+networks:
+  teletype:

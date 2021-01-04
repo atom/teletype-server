@@ -27,6 +27,7 @@
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "server-destroy": "^1.0.1",
+    "socketcluster-client": "^13.0.0",
     "temp": "^0.8.3",
     "throng": "^4.0.0",
     "uuid": "^3.0.1"

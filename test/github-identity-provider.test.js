@@ -1,8 +1,8 @@
 const assert = require('assert')
 const {RequestError, StatusCodeError} = require('request-promise-core/lib/errors')
-const IdentityProvider = require('../lib/identity-provider')
+const GithubIdentityProvider = require('../lib/github-identity-provider')
 
-suite('IdentityProvider', () => {
+suite('GithubIdentityProvider', () => {
   test('returns user associated with OAuth token', async () => {
     const request = {
       get: async function (url, {headers}) {
@@ -19,7 +19,7 @@ suite('IdentityProvider', () => {
       }
     }
 
-    const provider = new IdentityProvider({request})
+    const provider = new GithubIdentityProvider({request})
 
     const user1 = await provider.identityForToken('user-1-token')
     assert.deepEqual(user1, {id: '1', login: 'user-1'})
@@ -36,7 +36,7 @@ suite('IdentityProvider', () => {
       }
     }
 
-    const provider = new IdentityProvider({request})
+    const provider = new GithubIdentityProvider({request})
 
     let error = null
     try {
@@ -56,7 +56,7 @@ suite('IdentityProvider', () => {
       }
     }
 
-    const provider = new IdentityProvider({request})
+    const provider = new GithubIdentityProvider({request})
 
     let error = null
     try {
@@ -75,7 +75,7 @@ suite('IdentityProvider', () => {
       }
     }
 
-    const provider = new IdentityProvider({request})
+    const provider = new GithubIdentityProvider({request})
 
     let error = null
     try {

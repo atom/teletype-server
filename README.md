@@ -43,6 +43,40 @@ To run teletype-server locally, you'll first need to have:
     npm test
     ```
 
+### Running locally using docker
+
+This allows to deploy teletype-server to a full private solution.
+Coturn is used instead of Twilio and SocketCluster instead of Pusher.
+
+1. Clone and bootstrap
+
+    ```
+    git clone https://github.com/atom/teletype-server.git
+    cd teletype-server
+    cp .env.local.example .env
+    docker-compose build
+    docker-compose up -d
+    createdb teletype-server-dev
+    createdb teletype-server-test
+    npm install
+    npm run migrate up
+    ```
+
+2. Copy the client ID and client secret for your OAuth app on github.com, and set those values in your `.env` file
+
+3. Start the server
+
+    ```
+    ./script/server
+    ```
+
+4. Run the tests
+
+    ```
+    npm test
+    ```
+
+
 ## Deploying
 
 Atom core team members can use [this guide](./docs/deployment.md) to test pull requests and deploy changes to production.
