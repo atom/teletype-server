@@ -1,0 +1,38 @@
+name: ci
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Start Postgres
+        run: sudo systemctl start postgresql.service
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: Create DB
+        run: |
+          sudo su postgres -c 'createuser -P --superuser runner'
+          createdb teletype-server-test
+      - name: Test
+        run: |
+          cp .env.example .env
+          npm ci
+          npm test
