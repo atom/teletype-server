@@ -1,4 +1,5 @@
-# teletype-server
+##### Atom and all repositories under Atom will be archived on December 15, 2022. Learn more in our [official announcement](https://github.blog/2022-06-08-sunsetting-atom/)
+ # teletype-server
 
 The server-side application that facilitates peer discovery for collaborative editing sessions in [Teletype](https://github.com/atom/teletype).
 
